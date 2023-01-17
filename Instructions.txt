@@ -1,0 +1,49 @@
+﻿Design a program that allows two players to play a game of checkers.You do not have to code A.I.
+The program should have:
+     1. A function to draw a single square at any position, and of any color.
+     2. A function to draw a checker at any position and of any color.
+     3. A function to draw the board that uses the draw square function and draw checker function.
+     4. A single 2D array to represent the checkerboard’s data. Color of the square, the type of 
+        piece on it, etc.
+
+~~Movement~~
+Movement on the checkerboard is handled by inputting two coordinates separated by a dash. For 
+example 12-34 will move a checker from position (1,2) to position(3,4). Only legal moves
+are allowed. You’ll have to check if a move can happen before you allow it to happen.
+
+~~Rules~~
+Checkers is played by two opponents, on opposite sides of the gameboard. One player has the dark 
+pieces; the other has the light pieces. Players alternate turns. A player may not move an
+opponent's piece. A move consists of moving a piece diagonally to an adjacent unoccupied square. 
+If the adjacent square contains an opponent's piece, and the square immediately beyond it is 
+vacant, the piece may be captured (and removed from the game) by jumping over it. Only the dark
+squares of the checkered board are used. A piece may move only diagonally into an unoccupied
+square. The player without pieces remaining, or who cannot move due to being blocked, loses the
+game.
+
+~~Men~~
+Uncrowned pieces (men) move one step diagonally forwards and capture an opponent's piece by 
+moving two consecutive steps in the same line, jumping over the piece on the first step. Multiple
+enemy pieces can be captured in a single turn provided this is done by successive jumps made by
+a single piece; the jumps do not need to be in the same line and may "zigzag" (change diagonal
+direction). Men can jump both forwards and backwards.
+
+~~Kings~~
+When a man reaches the kings row (farthest row forward), it becomes a king, and is marked by
+placing an additional piece on top of the first man, and acquires additional powers including
+the ability to move backwards and capture backwards. Like men, a king can make successive jumps
+in a single turn provided that each jump captures an enemy man or king.
+Kings may also fly, meaning they can move any distance along unblocked diagonals, and may capture
+an opposing man any distance away by jumping to any of the unoccupied squares immediately beyond
+it. Because jumped pieces remain on the board until the turn is complete, it is possible to
+reach a position in a multi-jump move where the flying king is blocked from capturing further
+by a piece already jumped.
+
+~~LAGINAPPE~~
+     • Make the checkerboard data global.
+     • After you’ve completed your design, I suggest tackling the square and checker drawing
+       functions first. A square can be defined by an x and y position and a width. Then the
+       draw board function. Then code movement and game rules.
+     • Make a function to check if a move is valid.
+     • To completely fill in a space on the console screen use char #9608
+     • Console.SetCursorPosition() and Console.ForegroundColor are your friend
