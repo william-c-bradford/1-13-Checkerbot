@@ -4,7 +4,7 @@
     {
         // Variables
         static bool gameState = true;
-        static int playerTurn;
+        static int playerTurn = 1;
         static int playerPiece;
         static int emptyPiece = 0;
         static int currentX;
@@ -42,33 +42,11 @@
             // Window title
             Console.Title = "Checkerbot";
 
-
-
-            // Set the player turn
-            playerTurn = 1;
-
-            // Call the functions during the game loop
-            while (gameState)
+            while (gameState == true)
             {
-                // If player 1 or player 2's turns
-                if (playerTurn < 3)
-                {
-                    DrawBoard(boardOffsetX, boardOffsetY);
+                GameLoop();
+            }// End while loop
 
-                    GetPlayerMoves();
-
-                    MovePiece(currentX, currentY, newX, newY);
-                }// End if player turn is greater than or equal to 3
-
-                // Else player turn resets to 1
-                else
-                {
-                    playerTurn = 1;
-                }// End else player turn resets
-                playerTurn++;
-            }
-
-            // ReadKey requires keypress to close console
             Console.ReadKey();
 
         }// End Main()
@@ -113,7 +91,6 @@
         // Function to draw the board that uses the DrawSquare() function and DrawChecker() function.
         public static void DrawBoard(int xPos, int yPos)
         {
-            DrawBoardIncices();
             // Drawing the checkerboard pattern with DrawSquare()
             for (int row = 0; row < squareCount; row++)
             {
@@ -171,11 +148,31 @@
             }// End row for loop
         }// End DrawBoard()
 
+        // Game loop
+        public static void GameLoop()
+        {
+            Console.Clear();
+            DrawBoardIncices();
+            DrawBoard(boardOffsetX, boardOffsetY);
+            GetPlayerMoves();
+            playerTurn++;
+
+            // If playerTurn goes over 2
+            if (playerTurn >= 3)
+            {
+                playerTurn = 1;
+            }// End if playerTurn goes over 2
+
+        }// End GameLoop()
+        
         // Get move input from the player
         public static void GetPlayerMoves()
         {
+            // Display current player
+            Console.Write("Player " + playerTurn + ", \n");
+
             // Asks the user to enter the piece they want to move and where they want to move it
-            Console.WriteLine("Enter the row and column of your piece followed by a '-' and \nthe row and column of a new square (ex: 12-34): ");
+            Console.Write("Enter the column and row of your piece followed by a '-' and \nthe column and row of a new square (ex: 12-34): ");
 
             // Reads the input from the user
             string userCoords = Console.ReadLine();
@@ -199,9 +196,7 @@
                 // Wrong format entered
                 Console.WriteLine("You did not use the correct format. Try again.");
                 Console.ReadKey();
-                Console.Clear();
-                DrawBoard(boardOffsetX, boardOffsetY);
-                GetPlayerMoves();
+                GameLoop();
             }// End catch
 
         }// End GetPlayerMoves()
@@ -219,13 +214,15 @@
                 if (playerPiece == 1 || playerPiece == 3)
                 {
                     // If player 1 piece is moving diagonally (up the board)
-                    if (currentX - newX == 1 && Math.Abs(currentY - newY) == 1) // X moving 1 space up, Y moving 1 space left or right
+                    if (Math.Abs(currentX - newX) == 1 && currentY - newY == 1) // X moving 1 space up, Y moving 1 space left or right
                     {
                         // If the new square is currently occupied
                         if (boardArray[newX, newY] != emptyPiece)
                         {
                             // The move cannot happen
-                            Console.WriteLine("1This is not a valid move. Enter another destination.");
+                            Console.WriteLine("This is not a valid move. Enter another destination.");
+                            Console.ReadKey();
+                            GameLoop();
                         }// End if the square is occupied
 
                         // Else if the new square is empty and legal
@@ -235,12 +232,15 @@
                             boardArray[currentX, currentY] = emptyPiece;
                             // Place the player piece in the new square
                             boardArray[newX, newY] = playerPiece;
+                            playerTurn++;
+                            GameLoop();
                         }// End else the new square is empty and legal
                     }// End if the player is not moving diagonally
 
                     // If player 1 piece is jumping a player 2 piece
-                    else if (currentX - newX == 2 && Math.Abs(currentY - newY) == 2 &&
-                            (boardArray[newX, newY] == 2 || boardArray[newX, newY] == 4))
+                    else if (Math.Abs(newX - currentX) == 2 && Math.Abs(newY - currentY) == 2 &&
+                            (boardArray[Math.Abs(newX + 1), Math.Abs(newY + 1)] == 2 ||
+                             boardArray[Math.Abs(newX + 1), Math.Abs(newY + 1)] == 4))
                     {
                         // Remove the player piece from the old square
                         boardArray[currentX, currentY] = emptyPiece;
@@ -248,19 +248,23 @@
                         boardArray[newX + 1, newY - 1] = playerPiece;
                         // Remove the player 2 piece
                         boardArray[newX, newY] = emptyPiece;
+                        playerTurn++;
+                        GameLoop();
                     }// End else if player 1 checker piece is jumping a player 2 piece
 
                     // Else if player piece is king piece
                     else if (playerPiece != 1 && playerPiece == 3)
                     {
                         // If player 1 king piece is moving diagonally (down the board)
-                        if (newX - currentX == 1 && Math.Abs(newY - currentY) == 1) // X moving 1 space down, Y moving 1 space left or right
+                        if (Math.Abs(newX - currentX) == 1 && Math.Abs(newY - currentY) == 1) // X moving 1 space down, Y moving 1 space left or right
                         {
                             // If the new square is currently occupied
                             if (boardArray[newX, newY] != emptyPiece)
                             {
                                 // The move cannot happen
-                                Console.WriteLine("2This is not a valid move. Enter another destination.");
+                                Console.WriteLine("This is not a valid move. Enter another destination.");
+                                Console.ReadKey();
+                                GameLoop();
                             }// End if the square is occupied
 
                             // Else if the new square is empty and legal
@@ -270,6 +274,8 @@
                                 boardArray[currentX, currentY] = emptyPiece;
                                 // Place the player piece in the new square
                                 boardArray[newX, newY] = playerPiece;
+                                playerTurn++;
+                                GameLoop();
                             }// End else the new square is empty and legal
                         }// End if the player is not moving diagonally
                     }// End else if player piece is not king piece
@@ -278,7 +284,9 @@
                     else
                     {
                         // The move cannot happen
-                        Console.WriteLine("3This is not a valid move. Try again.");
+                        Console.WriteLine("This is not a valid move. Try again.");
+                        Console.ReadKey();
+                        GameLoop();
                     }// End else if player 1 is not moving diagonally
                 }// End if player 1 is moving a player 1 checker piece
 
@@ -286,7 +294,9 @@
                 else
                 {
                     // The piece cannot be moved by player 1
-                    Console.WriteLine("4This is not a valid piece. Enter another selection.");
+                    Console.WriteLine("This is not a valid piece. Enter another selection.");
+                    Console.ReadKey();
+                    GameLoop();
                 }// End else player 1 did not select a player 1 piece
             }// End if player 1's turn
 
@@ -297,13 +307,15 @@
                 if (playerPiece == 2 || playerPiece == 4)
                 {
                     // If player 2 piece is moving diagonally (up the board)
-                    if (newX - currentX == 1 && Math.Abs(newY - currentY) == 1) // X moving 1 space down, Y moving 1 space left or right
+                    if (Math.Abs(currentX - newX) == 1 && currentY - newY == -1) // X moving 1 space down, Y moving 1 space left or right
                     {
                         // If the new square is currently occupied
                         if (boardArray[newX, newY] != emptyPiece)
                         {
                             // The move cannot happen
-                            Console.WriteLine("AThis is not a valid move. Enter another destination.");
+                            Console.WriteLine("This is not a valid move. Enter another destination.");
+                            Console.ReadKey();
+                            GameLoop();
                         }// End if the square is occupied
 
                         // Else if the new square is empty and legal
@@ -313,6 +325,8 @@
                             boardArray[currentX, currentY] = emptyPiece;
                             // Place the player piece in the new square
                             boardArray[newX, newY] = playerPiece;
+                            playerTurn++;
+                            GameLoop();
                         }// End else the new square is empty and legal
                     }// End if the player is not moving diagonally
 
@@ -326,6 +340,8 @@
                         boardArray[newX + 1, newY - 1] = playerPiece;
                         // Remove the player 1 piece
                         boardArray[newX, newY] = emptyPiece;
+                        playerTurn++;
+                        GameLoop();
                     }// End else if player 2 checker piece is jumping a player 1 piece
 
                     // Else if player piece is king piece
@@ -338,7 +354,9 @@
                             if (boardArray[newX, newY] != emptyPiece)
                             {
                                 // The move cannot happen
-                                Console.WriteLine("BThis is not a valid move. Enter another destination.");
+                                Console.WriteLine("This is not a valid move. Enter another destination.");
+                                Console.ReadKey();
+                                GameLoop();
                             }// End if the square is occupied
 
                             // Else if the new square is empty and legal
@@ -348,6 +366,8 @@
                                 boardArray[currentX, currentY] = emptyPiece;
                                 // Place the player piece in the new square
                                 boardArray[newX, newY] = playerPiece;
+                                playerTurn++;
+                                GameLoop();
                             }// End else the new square is empty and legal
                         }// End if the player is not moving diagonally
                     }// End else if player piece is not king piece
@@ -356,7 +376,9 @@
                     else
                     {
                         // The move cannot happen
-                        Console.WriteLine("CThis is not a valid move. Try again.");
+                        Console.WriteLine("This is not a valid move. Try again.");
+                        Console.ReadKey();
+                        GameLoop();
                     }// End else if player 1 is not moving diagonally
                 }// End if player 1 is moving a player 1 checker piece
 
@@ -364,7 +386,9 @@
                 else
                 {
                     // The piece cannot be moved by player 2
-                    Console.WriteLine("DThis is not a valid piece. Enter another selection.");
+                    Console.WriteLine("This is not a valid piece. Enter another selection.");
+                    Console.ReadKey();
+                    GameLoop();
                 }// End else player 2 did not select a player 2 piece
             }// End if player 2's turn
 
