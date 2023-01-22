@@ -11,6 +11,11 @@
         static int currentY;
         static int newX;
         static int newY;
+        static int diffX = Math.Abs(newX - currentX);
+        static int diffY = Math.Abs(newY - currentY);
+        static int midX = (newX + currentX) / 2;
+        static int midY = (newY + currentY) / 2;
+        static int midPiece;
         const int squareCount = 8;                  // Number of squares on each row and column of the board (8x8)
         const int squareScale = 5;                  // Scaling the size of each square
         const int squareWidth = 2 * squareScale;    // Scaling the width of each square to account for the font of the console (font is twice as tall as wide)
@@ -151,25 +156,30 @@
         // Game loop
         public static void GameLoop()
         {
-            Console.Clear();
-            DrawBoardIncices();
-            DrawBoard(boardOffsetX, boardOffsetY);
-            GetPlayerMoves();
-            playerTurn++;
-
             // If playerTurn goes over 2
             if (playerTurn >= 3)
             {
                 playerTurn = 1;
             }// End if playerTurn goes over 2
+            
+            Console.Clear();
+            DrawBoardIncices();
+            DrawBoard(boardOffsetX, boardOffsetY);
+            GetPlayerMoves();
 
         }// End GameLoop()
         
         // Get move input from the player
         public static void GetPlayerMoves()
         {
+            // If playerTurn goes over 2
+            if (playerTurn >= 3)
+            {
+                playerTurn = 1;
+            }// End if playerTurn goes over 2
+
             // Display current player
-            Console.Write("Player " + playerTurn + ", \n");
+            Console.Write("Player " + playerTurn + ",\n");
 
             // Asks the user to enter the piece they want to move and where they want to move it
             Console.Write("Enter the column and row of your piece followed by a '-' and \nthe column and row of a new square (ex: 12-34): ");
@@ -214,7 +224,7 @@
                 if (playerPiece == 1 || playerPiece == 3)
                 {
                     // If player 1 piece is moving diagonally (up the board)
-                    if (Math.Abs(currentX - newX) == 1 && currentY - newY == 1) // X moving 1 space up, Y moving 1 space left or right
+                    if (Math.Abs(currentX - newX) == 1 && currentY - newY == 1 && currentY > newY) // X moving 1 space up, Y moving 1 space left or right
                     {
                         // If the new square is currently occupied
                         if (boardArray[newX, newY] != emptyPiece)
@@ -238,18 +248,22 @@
                     }// End if the player is not moving diagonally
 
                     // If player 1 piece is jumping a player 2 piece
-                    else if (Math.Abs(newX - currentX) == 2 && Math.Abs(newY - currentY) == 2 &&
-                            (boardArray[Math.Abs(newX + 1), Math.Abs(newY + 1)] == 2 ||
-                             boardArray[Math.Abs(newX + 1), Math.Abs(newY + 1)] == 4))
+                    else if ((Math.Abs(newX - currentX) == 2 && Math.Abs(newY - currentY) == 2) && currentY > newY)
                     {
-                        // Remove the player piece from the old square
-                        boardArray[currentX, currentY] = emptyPiece;
-                        // Place the player 1 piece in the space behind the player 2 piece
-                        boardArray[newX + 1, newY - 1] = playerPiece;
-                        // Remove the player 2 piece
-                        boardArray[newX, newY] = emptyPiece;
-                        playerTurn++;
-                        GameLoop();
+                        // If the diagonal is occupied by a player 2 piece and the diagonal behind it is empty
+                        if ((diffX == 1) && (diffY == 1) &&
+                            (boardArray[midX, midY] == 2 ||
+                             boardArray[midX, midY] == 4))
+                        {
+                            // Remove the player piece from the old square
+                            boardArray[currentX, currentY] = emptyPiece;
+                            // Place the player 1 piece in the space behind the player 2 piece
+                            boardArray[newX, newY] = playerPiece;
+                            // Remove the player 2 piece
+                            boardArray[midX, midY] = emptyPiece;
+                            playerTurn++;
+                            GameLoop();
+                        }// End if jumping diagonal
                     }// End else if player 1 checker piece is jumping a player 2 piece
 
                     // Else if player piece is king piece
@@ -337,9 +351,9 @@
                         // Remove the player piece from the old square
                         boardArray[currentX, currentY] = emptyPiece;
                         // Place the player 2 piece in the space behind the player 1 piece
-                        boardArray[newX + 1, newY - 1] = playerPiece;
+                        boardArray[newX, newY] = playerPiece;
                         // Remove the player 1 piece
-                        boardArray[newX, newY] = emptyPiece;
+                        boardArray[midX, midY] = emptyPiece;
                         playerTurn++;
                         GameLoop();
                     }// End else if player 2 checker piece is jumping a player 1 piece
