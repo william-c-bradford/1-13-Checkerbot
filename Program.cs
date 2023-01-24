@@ -3,56 +3,56 @@
     internal class Program
     {
         // Global variables
-        static bool runGame         = true;               // Runs the game as long as this is true
-        static int  playerTurn      = 1;                  // Sets the current player turn
-        static int  currentSquare;                        // Stores the value of which piece is in use from boardArray[,]
-        static int  newSquare;                            // Stores the value of the destination square from boardArray[,]
-        static int  emptySquare     = 0;                  // Stores the value of an empty square on the board (0)
-        static int  currentX;                             // User input of the selected x coordinate for their piece
-        static int  currentY;                             // User input of the selected y coordinate for their piece
-        static int  newX;                                 // User input of their piece's x destination
-        static int  newY;                                 // User input of their piece's y destination
-        const  int  player1Checker  = 1;                  // The integer representing player 1's checker piece
-        const  int  player2Checker  = 2;                  // The integer representing player 2's checker piece
-        const  int  player1King     = 3;                  // The integer representing player 1's king piece
-        const  int  player2King     = 4;                  // The integer representing player 2's king piece
-        const  int  squareCount     = 8;                  // Number of squares on each row and column of the board (8x8)
-        const  int  squareScale     = 5;                  // Scaling the size of each square
-        const  int  squareWidth     = 2 * squareScale;    // Scaling the width of each square for font size (font is twice as tall as wide)
-        const  int  checkerWidth    = 6;                  // The width of a checker piece
-        const  int  checkerHeight   = 3;                  // The height of a checker piece
-        const  int  checkerStartX   = 6;                  // The left-most x position for a checker piece
-        const  int  checkerStartY   = 4;                  // The top-most y position for a checker piece
-        const  int  checkerXScale   = 10;                 // The scale at which the x position of a checker changes between pieces
-        const  int  checkerYScale   = 5;                  // The scale at which the y position of a checker changes between pieces
-        const  int  boardOffsetX    = 4;                  // The x position offset of the checkerboard from the console window
-        const  int  boardOffsetY    = 3;                  // The y position offset of the checkerboard from the console window
-        const  int  textOffsetX     = 6;                  // The x position offset of the text below the board
-        const  int  textOffsetY     = 43;                 // The y position offset of the text below the board
+        static bool runGame           = true;               // Runs the game as long as this is true
+        static int  playerTurn        = 1;                  // Sets the current player turn
+        static int  currentSquare;                          // Stores the value of which piece is in use from boardArray[,]
+        static int  newSquare;                              // Stores the value of the destination square from boardArray[,]
+        static int  emptySquare       = 0;                  // Stores the value of an empty square on the board (0)
+        static int  currentX;                               // User input of the selected x coordinate for their piece
+        static int  currentY;                               // User input of the selected y coordinate for their piece
+        static int  newX;                                   // User input of their piece's x destination
+        static int  newY;                                   // User input of their piece's y destination
+        const  int  PLAYER_1_CHECKER  = 1;                  // The integer representing player 1's checker piece
+        const  int  PLAYER_2_CHECKER  = 2;                  // The integer representing player 2's checker piece
+        const  int  PLAYER_1_KING     = 3;                  // The integer representing player 1's king piece
+        const  int  PLAYER_2_KING     = 4;                  // The integer representing player 2's king piece
+        const  int  SQUARE_COUNT      = 8;                  // Number of squares on each row and column of the board (8x8)
+        const  int  SQUARE_SCALE      = 5;                  // Scaling the size of each square
+        const  int  SQUARE_WIDTH      = 2 * SQUARE_SCALE;   // Scaling the width of each square for font size (font is twice as tall as wide)
+        const  int  CHECKER_WIDTH     = 6;                  // The width of a checker piece
+        const  int  CHECKER_HEIGHT    = 3;                  // The height of a checker piece
+        const  int  CHECKER_START_X   = 6;                  // The left-most x position for a checker piece
+        const  int  CHECKER_START_Y   = 4;                  // The top-most y position for a checker piece
+        const  int  CHECKER_X_SCALE   = 10;                 // The scale at which the x position of a checker changes between pieces
+        const  int  CHECKER_Y_SCALE   = 5;                  // The scale at which the y position of a checker changes between pieces
+        const  int  BOARD_OFFSET_X    = 4;                  // The x position offset of the checkerboard from the console window
+        const  int  BOARD_OFFSET_Y    = 3;                  // The y position offset of the checkerboard from the console window
+        const  int  TEXT_OFFSET_X     = 6;                  // The x position offset of the text below the board
+        const  int  TEXT_OFFSET_Y     = 43;                 // The y position offset of the text below the board
 
         // 2D array of the starting checkerboard
-        static int[,] boardArray = new int[squareCount, squareCount]
+        static int[,] boardArray = new int[SQUARE_COUNT, SQUARE_COUNT]
         {
-            { 0, 2, 0, 0, 0, 1, 0, 1 },                 // 0 = Empty space
-            { 2, 0, 2, 0, 0, 0, 1, 0 },                 // 1 = Player 1 checker piece
-            { 0, 2, 0, 0, 0, 1, 0, 1 },                 // 2 = Player 2 checker piece
-            { 2, 0, 2, 0, 0, 0, 1, 0 },                 // 3 = Player 1 king piece
-            { 0, 2, 0, 0, 0, 1, 0, 1 },                 // 4 = Player 2 king piece
+            { 0, 2, 0, 0, 0, 1, 0, 1 },                     // 0 = Empty space
+            { 2, 0, 2, 0, 0, 0, 1, 0 },                     // 1 = Player 1 checker piece
+            { 0, 2, 0, 0, 0, 1, 0, 1 },                     // 2 = Player 2 checker piece
+            { 2, 0, 2, 0, 0, 0, 1, 0 },                     // 3 = Player 1 king piece
+            { 0, 2, 0, 0, 0, 1, 0, 1 },                     // 4 = Player 2 king piece
             { 2, 0, 2, 0, 0, 0, 1, 0 },
             { 0, 2, 0, 0, 0, 1, 0, 1 },
             { 2, 0, 2, 0, 0, 0, 1, 0 }
         };
 
-        //// Testing boardArray[,]
+        // Testing boardArray[,]
         //{
         //    { 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    { 0, 0, 0, 0, 0, 0, 1, 0 },
-        //    { 0, 0, 0, 2, 0, 1, 0, 0 },
-        //    { 0, 0, 0, 0, 0, 0, 1, 0 },
-        //    { 0, 1, 0, 0, 0, 1, 0, 0 },
-        //    { 0, 0, 0, 0, 1, 0, 1, 0 },
         //    { 0, 0, 0, 0, 0, 0, 0, 0 },
-        //    { 0, 0, 0, 0, 0, 0, 2, 0 }
+        //    { 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    { 0, 0, 0, 0, 2, 0, 0, 0 },
+        //    { 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    { 0, 0, 0, 0, 0, 0, 3, 0 },
+        //    { 0, 0, 0, 0, 0, 0, 0, 0 },
+        //    { 0, 0, 0, 0, 0, 0, 0, 0 }
         //};
 
         // Function Main()
@@ -127,19 +127,19 @@
         public static void DrawBoard(int xPos, int yPos)
         {
             // Draw the checkerboard pattern with DrawSquare()
-            for (int row = 0; row < squareCount; row++)
+            for (int row = 0; row < SQUARE_COUNT; row++)
             {
-                for (int col = 0; col < squareCount; col++)
+                for (int col = 0; col < SQUARE_COUNT; col++)
                 {
                     // If the square is even draw the square Dark Red
                     if ((row + col) % 2 == 0)
                     {
-                        DrawSquare(xPos + row * squareWidth, yPos + col * squareScale, squareWidth, 1 * squareScale, ConsoleColor.DarkRed);
+                        DrawSquare(xPos + row * SQUARE_WIDTH, yPos + col * SQUARE_SCALE, SQUARE_WIDTH, 1 * SQUARE_SCALE, ConsoleColor.DarkRed);
                     }// End if square is even
                     // Else the square is odd draw the square Dark Grey
                     else
                     {
-                        DrawSquare(xPos + row * squareWidth, yPos + col * squareScale, squareWidth, 1 * squareScale, ConsoleColor.DarkGray);
+                        DrawSquare(xPos + row * SQUARE_WIDTH, yPos + col * SQUARE_SCALE, SQUARE_WIDTH, 1 * SQUARE_SCALE, ConsoleColor.DarkGray);
                     }// End else square is odd
                 }// End for columns
 
@@ -148,45 +148,45 @@
             }// End for rows
 
             // Draw the player checkers on the board using DrawChecker()
-            for (int row = 0; row < squareCount; row++)
+            for (int row = 0; row < SQUARE_COUNT; row++)
             {
-                for (int col = 0; col < squareCount; col++)
+                for (int col = 0; col < SQUARE_COUNT; col++)
                 {
                     // If player 1 checker piece is on board
-                    if (boardArray[row, col] == player1Checker)
+                    if (boardArray[row, col] == PLAYER_1_CHECKER)
                     {
                         // Draw a player 1 checker piece (black)
-                        DrawCheckerPiece(checkerStartX + (row * checkerXScale), checkerStartY + (col * checkerYScale),
-                            checkerWidth, checkerHeight, ConsoleColor.Black);
+                        DrawCheckerPiece(CHECKER_START_X + (row * CHECKER_X_SCALE), CHECKER_START_Y + (col * CHECKER_Y_SCALE),
+                            CHECKER_WIDTH, CHECKER_HEIGHT, ConsoleColor.Black);
                     }// End if player 1 checker piece is on board
 
                     // Else if player 2 checker piece is on board
-                    else if (boardArray[row, col] == player2Checker)
+                    else if (boardArray[row, col] == PLAYER_2_CHECKER)
                     {
                         // Draw a player 2 checker piece (white)
-                        DrawCheckerPiece(checkerStartX + (row * checkerXScale), checkerStartY + (col * checkerYScale),
-                            checkerWidth, checkerHeight, ConsoleColor.White);
+                        DrawCheckerPiece(CHECKER_START_X + (row * CHECKER_X_SCALE), CHECKER_START_Y + (col * CHECKER_Y_SCALE),
+                            CHECKER_WIDTH, CHECKER_HEIGHT, ConsoleColor.White);
                     }// End else if player 2 checker piece is on board
 
                     // Else if player 1 king piece is on board
-                    else if (boardArray[row, col] == player1King)
+                    else if (boardArray[row, col] == PLAYER_1_KING)
                     {
                         // Draw a player 1 king piece (black with dark yellow crown)
-                        DrawKingPiece(checkerStartX + (row * checkerXScale), checkerStartY + (col * checkerYScale),
-                            checkerWidth, checkerHeight, ConsoleColor.Black);
+                        DrawKingPiece(CHECKER_START_X + (row * CHECKER_X_SCALE), CHECKER_START_Y + (col * CHECKER_Y_SCALE),
+                            CHECKER_WIDTH, CHECKER_HEIGHT, ConsoleColor.Black);
                     }// End else if player 1 king piece is on board
 
                     // Else if player 2 king piece is on board
-                    else if (boardArray[row, col] == player2King)
+                    else if (boardArray[row, col] == PLAYER_2_KING)
                     {
                         // Draw a player 2 king piece (white with dark yellow crown)
-                        DrawKingPiece(checkerStartX + (row * checkerXScale), checkerStartY + (col * checkerYScale),
-                            checkerWidth, checkerHeight, ConsoleColor.White);
+                        DrawKingPiece(CHECKER_START_X + (row * CHECKER_X_SCALE), CHECKER_START_Y + (col * CHECKER_Y_SCALE),
+                            CHECKER_WIDTH, CHECKER_HEIGHT, ConsoleColor.White);
                     }// End else if player 2 king piece is on board
                 }// End for columns
 
                 // Set the cursor position
-                Console.SetCursorPosition(textOffsetX, top: textOffsetY);
+                Console.SetCursorPosition(TEXT_OFFSET_X, top: TEXT_OFFSET_Y);
             }// End for rows
         }// End DrawBoard()
 
@@ -194,17 +194,17 @@
         public static void CheckKingPiece()
         {
             // If player 1 reaches the opposite end of the board
-            if (newY == 0 && currentSquare == player1Checker)
+            if (newY == 0 && currentSquare == PLAYER_1_CHECKER)
             {
                 // The player 1 checker piece is replaced with a player 1 king piece
-                boardArray[newX, newY] = player1King;
+                boardArray[newX, newY] = PLAYER_1_KING;
             }// End if player 1 reaches the opposite end of the board
 
             // If player 2 reaches the opposite end of the board
-            if (newY == 7 && currentSquare == player2Checker)
+            if (newY == 7 && currentSquare == PLAYER_2_CHECKER)
             {
                 // The player 2 checker piece is replaced with a player 2 king piece
-                boardArray[newX, newY] = player2King;
+                boardArray[newX, newY] = PLAYER_2_KING;
             }// End if player 2 reaches the opposite end of the board
         }// End CheckKingPiece()
 
@@ -218,7 +218,7 @@
             DrawBoardIndices();
 
             // Draw the checkerboard and all pieces with DrawBoard()
-            DrawBoard(boardOffsetX, boardOffsetY);
+            DrawBoard(BOARD_OFFSET_X, BOARD_OFFSET_Y);
 
             // Check if a player has no more pieces with CheckNoPiecesWin()
             CheckNoPieces();
@@ -265,18 +265,18 @@
             int player2Count = 0;
 
             // Count the number of player 1 and player 2 pieces on the board (boardArray[,])
-            for (int i = 0; i < squareCount; i++)
+            for (int i = 0; i < SQUARE_COUNT; i++)
             {
-                for (int j = 0; j < squareCount; j++)
+                for (int j = 0; j < SQUARE_COUNT; j++)
                 {
                     // If player 1 has pieces on the board
-                    if (boardArray[i, j] == player1Checker || boardArray[i, j] == player1King)
+                    if (boardArray[i, j] == PLAYER_1_CHECKER || boardArray[i, j] == PLAYER_1_KING)
                     {
                         player1Count++;
                     }// End if player 1 has pieces on the board
 
                     // If player 2 has pieces on the board
-                    if (boardArray[i, j] == player2Checker || boardArray[i, j] == player2King)
+                    if (boardArray[i, j] == PLAYER_2_CHECKER || boardArray[i, j] == PLAYER_2_KING)
                     {
                         player2Count++;
                     }// End if player 2 has pieces on the board
@@ -357,8 +357,8 @@
             int diffY     = Math.Abs(newY - currentY);
 
             // If player 1 is moving a player 1 piece or player 2 is moving a player 2 piece (regular pieces can only move one direction)
-            if (((playerTurn == 1 && ((currentSquare == player1Checker && currentY > newY) || currentSquare == player1King))   ||
-               (( playerTurn == 2 && ((currentSquare == player2Checker && newY > currentY) || currentSquare == player2King)))) &&
+            if (((playerTurn == 1 && ((currentSquare == PLAYER_1_CHECKER && currentY > newY) || currentSquare == PLAYER_1_KING))   ||
+               (( playerTurn == 2 && ((currentSquare == PLAYER_2_CHECKER && newY > currentY) || currentSquare == PLAYER_2_KING)))) &&
                   newSquare  == emptySquare && currentX != newX && currentY != newY)
             {
                 // If jumping a piece and the diagonal space behind the other player's piece is empty
